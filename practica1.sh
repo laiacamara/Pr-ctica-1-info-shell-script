@@ -4,8 +4,18 @@ codiestat='XX'
 resposta='XX'
 
 while [ "resposta" != 'q' ]; do
-	echo "Aqui escrius el menu"
-	read resposta
+	echo "q: SORTIR"
+	echo "lp: LLISTAR PAÏSOS"
+	echo "sc: SELECCIONAR PAÍS"
+ 	echo "se: SELECCIONAR ESTAT"
+  	echo "le: LLISTAR ELS ESTATS DEL PAÍS SELECCIONAT"
+   	echo "lcp: LLISTAR LES POBLACIONS DEL PAÍS SELECCIONAT"
+    	echo "ecp: EXTREURE LES POBLACIONS DEL PAÍS SELECCIONAT"
+     	echo "lce: LLISTAR LES POBLACIONS DE L'ESTAT SELECCIONAT"
+      	echo "ece: EXTREURE LES POBLACIONS DE L'ESTAT SELECCIONAT"
+       	echo "gwd: OBTENIR DADES D'UNA CIUTAT DE LA WIKIDATA"
+	echo "est: OBTENIR ESTADÍSTIQUES"
+  	read resposta
 	case "$resposta" in
 
 q)
@@ -21,7 +31,7 @@ cut -d ',' -f7,8 cities.csv | uniq
 ;;
 
 sc)
-echo "Nom del pais: "
+echo "Nom del país: "
 read nompais
 
 if [[ -z "$nompais" ]];then
@@ -73,7 +83,7 @@ echo "L'arxiu $file ha sigut generat amb èxit."
 lce)
 echo "Estat $codiestat i país $codipais seleccionats"
 if [ "$codiestat" == "XX" ]; then
-    echo "No has seleccionado un estat en l'ordre se."
+    echo "No has seleccionat un estat d'ordre se."
 else
     echo "Llistat de poblacions de l'estat $codiestat i país $codipais seleccionat:"
     awk -F ',' -v country="$codipais" -v state="$codiestat" '$7 == country && $4 == state { print $2, $11 }' cities.csv
@@ -84,7 +94,7 @@ fi
 ece)
 echo "Estat $codiestat i país $codipais seleccionats"
 if [ "$codiestat" == "XX" ]; then
-    echo "No has seleccionado un estat en l'ordre se."
+    echo "No has seleccionat un estat d'ordre se."
 else
     file="${codipais}_${codiestat}.csv"
     echo "Extracció de poblacions de l'estat $codiestat i país $codipais seleccionat:"
@@ -101,7 +111,7 @@ echo "$nompoblacio"
 wdid=$(awk -F ',' -v pais="$codipais" -v estat="$codiestat" -v poblacio="$nompoblacio" '$7 == pais && $4 == estat && $2 == poblacio { print $11 }' cities.csv)
 
 if [ -z "$wdid" ]; then
-    echo "No se encontró el wikidataId para la población seleccionada."
+    echo "No 'ha trobat el wikidataId per a la població seleccionada."
 else
     # Utiliza el wikidataId obtenido para descargar los datos de Wikidata en formato JSON
 	wikidataUrl="https://www.wikidata.org/wiki/Special:EntityData/$wdid.json" #Busca al web les dades de la població (utilitznat la variable WikidataId en funció de la població/estat)
@@ -153,7 +163,6 @@ print "Sense wikiDataId: " no_wikiDataId
 }' cities.csv
 ;;
 
-
 *)
 echo "La variable interna se li assignarà el valor XX"
 ;;
@@ -161,7 +170,6 @@ echo "La variable interna se li assignarà el valor XX"
 "")
 echo "El valor de la variable interna no canvia"
 ;;
-
 
 esac
 done
